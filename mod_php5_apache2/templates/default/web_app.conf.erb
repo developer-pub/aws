@@ -1,0 +1,33 @@
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+  <% if @params[:server_aliases] && !@params[:server_aliases].empty? -%>
+  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+  <% end -%>
+  DocumentRoot <%= @params[:docroot] %>
+
+  <Directory <%= @params[:docroot] %>>
+    Options FollowSymLinks
+    Order allow,deny
+    Allow from all
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+  <Directory ~ "\.svn">
+    Order allow,deny
+    Deny from all
+  </Directory>
+
+  <Directory ~ "\.git">
+    Order allow,deny
+    Deny from all
+  </Directory>
+
+  FileETag none
+
+  RewriteEngine On
+
+  <% @environment.each do |key, value| %>
+  SetEnv "<%= key %>" "<%= value %>"
+  <% end %>
+</VirtualHost>
