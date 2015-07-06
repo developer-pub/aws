@@ -1,0 +1,5 @@
+name        "custom"
+description "Configures AWS server"
+maintainer  "Custom"
+license     "Apache 2.0"
+version     "1.0.0"
