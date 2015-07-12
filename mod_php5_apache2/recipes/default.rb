@@ -7,6 +7,10 @@ execute "Create conf directory" do
   command "mkdir /etc/httpd"
 end
 
+execute "Create ssl directory" do
+  command "mkdir /etc/httpd/ssl"
+end
+
 #We need to uninstall old php packages because they conflict with newer
 node[:mod_php5_apache2][:packages_remove].each do |pkg|
   package pkg do
