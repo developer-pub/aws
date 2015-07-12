@@ -62,6 +62,33 @@ node[:deploy].each do |application, deploy|
     )
   end
 
+  template "/etc/httpd/ssl/#{deploy[:domains].first}.crt" do
+    mode 0600
+    source 'ssl.key.erb'
+    variables :key => deploy[:ssl_certificate]
+    only_if do
+      deploy[:ssl_support]
+    end
+  end
+
+  template "/etc/httpd/ssl/#{deploy[:domains].first}.key" do
+    mode 0600
+    source 'ssl.key.erb'
+    variables :key => deploy[:ssl_certificate_key]
+    only_if do
+      deploy[:ssl_support]
+    end
+  end
+
+  template "/etc/httpd/ssl/#{deploy[:domains].first}.ca" do
+    mode 0600
+    source 'ssl.key.erb'
+    variables :key => deploy[:ssl_certificate_ca]
+    only_if do
+      deploy[:ssl_support] && deploy[:ssl_certificate_ca]
+    end
+  end
+
   # template "#{node[:apache][:dir]}/ssl/#{deploy[:domains].first}.crt" do
   #   mode 0600
   #   source 'ssl.key.erb'

@@ -31,3 +31,48 @@
   SetEnv "<%= key %>" "<%= value %>"
   <% end %>
 </VirtualHost>
+
+<% if node[:deploy][@application_name][:ssl_support] -%>
+<VirtualHost *:443>
+  ServerName <%= @params[:server_name] %>
+  <% if @params[:server_aliases] && !@params[:server_aliases].empty? -%>
+  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+  <% end -%>
+  DocumentRoot <%= @params[:docroot] %>
+
+  SSLEngine on
+  SSLProxyEngine on
+  SSLCertificateFile /etc/httpd/ssl/<%= @params[:server_name] %>.crt
+  SSLCertificateKeyFile /etc/httpd/ssl/<%= @params[:server_name] %>.key
+  <% if @params[:ssl_certificate_ca] -%>
+  SSLCACertificateFile /etc/httpd/ssl/<%= @params[:server_name] %>.ca
+  <% end -%>
+  SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
+
+  <Directory <%= @params[:docroot] %>>
+    Options FollowSymLinks
+    Order allow,deny
+    Allow from all
+    AllowOverride All
+    Require all granted
+  </Directory>
+
+  <Directory ~ "\.svn">
+    Order allow,deny
+    Deny from all
+  </Directory>
+
+  <Directory ~ "\.git">
+    Order allow,deny
+    Deny from all
+  </Directory>
+
+  FileETag none
+
+  RewriteEngine On
+
+  <% @environment.each do |key, value| %>
+  SetEnv "<%= key %>" "<%= value %>"
+  <% end %>
+</VirtualHost>
+<% end -%>
