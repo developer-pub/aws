@@ -14,7 +14,9 @@ default[:mod_php5_apache2][:packages] = [
     "php-pear-HTML-Common",
     "php55",
     "php55-devel",
-    "php-pear-Mail-Mime"
+    "php-pear-Mail-Mime",
+
+    "mod24_ssl"
 ]
 
 #We remove everything (even Apache 2.4) to start with clean state
@@ -36,6 +38,7 @@ default[:mod_php5_apache2][:packages_remove] = [
     "php-pear-Mail-Mime",
     "httpd",
     "httpd-tools",
+    "mod_ssl",
 
     "php55-xml",
     "php55-common",
@@ -47,5 +50,6 @@ default[:mod_php5_apache2][:packages_remove] = [
     "php55",
     "php55-devel",
     "httpd24",
-    "httpd24-tools"
+    "httpd24-tools",
+    "mod24_ssl"
 ]
