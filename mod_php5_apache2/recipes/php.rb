@@ -1,8 +1,3 @@
-#Stop Apache
-execute "Stop Apache" do
-  command "sleep 1 && /sbin/service httpd stop && sleep 1"
-end
-
 #Let AWS Opsworks download from Git and deploy to /srv
 include_recipe 'deploy'
 
@@ -120,6 +115,12 @@ node[:deploy].each do |application, deploy|
   # end
 end
 
+#Stop Apache
+execute "Stop Apache" do
+  command "sleep 3 && /sbin/service httpd stop && sleep 3"
+end
+
+#Start Apache
 execute "Restart Apache" do
-  command "sleep 1 && /sbin/service httpd restart && sleep 1"
+  command "sleep 3 && /sbin/service httpd restart && sleep 3"
 end
